@@ -1,21 +1,50 @@
 #include "main.h"
-#include "WiFi.h"
 
 int dutyCycle;
-const int LEDPin = 32;
-const int PWMFreq = 500;
-const int PWMChannel = 0;
-const int PWMResolution = 8;
+
 int knobValue1 = 0;
 
 void setup() {
-  ledcSetup(PWMChannel, PWMFreq, PWMResolution);
-  ledcAttachPin(LEDPin, PWMChannel);
-  ledcWrite(PWMChannel, 240);
-  delay(1000);
-  pinMode(PIN_R_BLUE , OUTPUT);
-  digitalWrite(PIN_R_BLUE, HIGH);
+    Serial.println("Start");
+
+    setupPins();
+    switchOffAllRelays();
+    
+    setupLeds();
+    connectToWiFi();
+    getNtpTime();
+
+
+    lastMillis=millis();
 }
+
+void setupPins()
+{
+    pinMode(PIN_R_BLUE , OUTPUT);
+    pinMode(PIN_R_RED , OUTPUT);
+    pinMode(PIN_R_EXTRA , OUTPUT);
+    pinMode(PIN_R_CO2 , OUTPUT);
+}
+
+void setupLeds()
+{
+    ledcSetup(PWM_BLUE_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
+    ledcSetup(PWM_RED_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
+    ledcSetup(PWM_EXTRA_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
+    
+    ledcAttachPin(PIN_LED_BLUE, PWM_BLUE_CHANNEL);
+    ledcAttachPin(PIN_LED_RED, PWM_BLUE_CHANNEL);
+    ledcAttachPin(PIN_LED_EXTRA, PWM_BLUE_CHANNEL);
+}
+
+void setNtpTimer()
+{
+    ntpTimer = timerBegin(0, 80, true);
+    timerAttachInterrupt(ntpTimer, &getNtpTime, true);
+    timerAlarmWrite(ntpTimer, (1000000 * 60) * 5, true);
+    timerAlarmEnable(ntpTimer);    
+}
+
 
 void loop() {
 /*  for(dutyCycle = 0; dutyCycle <= MAX_DUTY_CYCLE; dutyCycle++)
@@ -32,25 +61,46 @@ void loop() {
   }*/
 }
 
-void startWiFi()
+
+
+void switchOffAllRelays()
+{
+    digitalWrite(PIN_R_BLUE, LOW);
+    digitalWrite(PIN_R_RED, LOW);
+    digitalWrite(PIN_R_EXTRA, LOW);
+    digitalWrite(PIN_R_CO2, LOW);
+}
+
+void checkWiFi()
+{
+    if (WiFi.status() != WL_CONNECTED)
+    {
+        WiFi.reconnect();
+        Serial.println("WIFI reconect");
+    }
+    else
+    {
+        Serial.println("WIFI connected nor reconect");
+    }
+}
+
+void connectToWiFi()
 {
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while ( WiFi.status() != WL_CONNECTED ) {
         delay ( 1000 );
     }
-    //timeClient.begin();
-    Serial.println( "" );
-    Serial.println( "WIFI ON" );
+    Serial.println("WIFI connected");
 }
 
 void getNtpTime()
 {
+    Serial.println("Get NTP time");
+    
     timeClient.update();
-    //timeHour = timeClient.getHours();
-    //timeMin = timeClient.getMinutes();
-
-//    if (isSummerTime(timeClient.getEpochTime())) timeHour++;
-
+    currTime.H = timeClient.getHours();
+    currTime.M = timeClient.getMinutes();
+    if (isSummerTime(timeClient.getEpochTime())) currTime.H++;
 }
 
 bool isSummerTime(unsigned long secs) 
