@@ -1,3 +1,6 @@
+#ifndef constants_h
+#define constants_h
+
 #define LEAP_YEAR(Y)     ( (Y>0) && !(Y%4) && ( (Y%100) || !(Y%400) ) )
 
 const int PWM_FREQ = 500;
@@ -42,3 +45,5 @@ const int LED_POWER[LED_LEVELS] =
 //WIFI
 const char* WIFI_SSID     = "meg-home";
 const char* WIFI_PASSWORD = "MateuszeK2003";
+
+#endif 

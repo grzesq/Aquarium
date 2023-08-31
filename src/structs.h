@@ -1,3 +1,6 @@
+#ifndef Structs_h
+#define Structs_h
+
 struct Config
 {
     short BlueStartH = 12;
@@ -17,4 +20,13 @@ struct Config
 
     short Co2Start = 12;
     short Co2Stop = 12;
-};
+} conf;
+
+struct CurrTime
+{
+    short H = 0;
+    short M = 0;
+} currTime;
+
+
+#endif
