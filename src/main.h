@@ -7,6 +7,14 @@ unsigned long currMillis = 0;
 
 short ntpUpdayeCounter = 0;
 
+bool isWorking = false;
+bool isWorkinglast = false;
+
 void setupPins();
 void switchOffAllRelays();
-void updateNtp();
+void updateTime();
+void isWorkingHours();
+void updateClock();
+void switchWorkingStatus();
+void checkCo2Status();
+void checkSystemStatus();

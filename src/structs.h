@@ -3,29 +3,33 @@
 
 struct Config
 {
+    short StartH = 8;
+    short EndH = 23;
+
     short BlueStartH = 12;
-    short BlueStartM = 12;
-    short BlueStopH = 12;
-    short BlueStopM = 12;
+    short BlueStartM = 00;
+    short BlueStopH = 21;
+    short BlueStopM = 00;
 
     short RedStartH = 12;
-    short RedStartM = 12;
-    short RedStopH = 12;
-    short RedStopM = 12;
+    short RedStartM = 15;
+    short RedStopH = 20;
+    short RedStopM = 45;
 
-    short ExtraStartH = 12;
-    short ExtraStartM = 12;
-    short ExtraStopH = 12;
-    short ExtraStopM = 12;
+    short ExtraStartH = 8;
+    short ExtraStartM = 0;
+    short ExtraStopH = 23;
+    short ExtraStopM = 00;
 
-    short Co2Start = 12;
-    short Co2Stop = 12;
+    short Co2Start = 11;
+    short Co2Stop = 19;
 } conf;
 
 struct CurrTime
 {
     short H = 0;
     short M = 0;
+    short S = 0;
 } currTime;
 
 

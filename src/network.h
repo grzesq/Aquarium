@@ -37,7 +37,7 @@ void connectToWiFi()
 {
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while ( WiFi.status() != WL_CONNECTED ) {
-        delay ( 1000 );
+        delay ( 5000 );
     }
     Serial.println("WIFI connected");
 }
@@ -50,11 +50,8 @@ void getNtpTime()
     timeClient.update();
     currTime.H = timeClient.getHours();
     currTime.M = timeClient.getMinutes();
+    currTime.S = timeClient.getSeconds();
     if (isSummerTime(timeClient.getEpochTime())) currTime.H++;
-    Serial.print("H: ");
-    Serial.println(currTime.H);
-    Serial.print("M: ");
-    Serial.println(currTime.M);
 }
 
 bool isSummerTime(unsigned long secs) 
