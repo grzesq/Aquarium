@@ -18,3 +18,4 @@ void updateClock();
 void switchWorkingStatus();
 void checkCo2Status();
 void checkSystemStatus();
+void checkWorkingHours();

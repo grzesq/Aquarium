@@ -21,8 +21,9 @@ const int PIN_R_CO2 = 17;
 
 const int MAX_DUTY_CYCLE = 255;
 const int LED_LEVELS = 15;
-const int MAX_LED_LEVELS = 14;
 
+const int LED_LEVEL_CHANGE_BY_MIN = 3;
+const int MAX_LED_POW_LEVELS = 11;
 const int LED_POWER[LED_LEVELS] = 
 {
     MAX_DUTY_CYCLE,
