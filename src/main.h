@@ -1,6 +1,7 @@
 #include <Arduino.h>
 #include "network.h"
 #include "leds.h"
+#include "lcd.h"
 
 unsigned long lastMillis = 0;
 unsigned long currMillis = 0;

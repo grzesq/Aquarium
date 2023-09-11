@@ -6,10 +6,6 @@
 #include "structs.h"
 #include "config.h"
 
-short bluePower = LED_POWER[0];
-short redPower = LED_POWER[0];
-short extraPower = LED_POWER[0];
-
 short bluePowerLvl = 0;
 short redPowerLvl = 0;
 
@@ -51,8 +47,13 @@ void checkBlueStatus()
 {
     if ((currTime.H == conf.BlueStartH &&  currTime.M >= conf.BlueStartM) ||
         (currTime.H == conf.BlueStopH &&  currTime.M < conf.BlueStopM) ||
-        (currTime.H > conf.BlueStartH))
+        (currTime.H > conf.BlueStartH && currTime.H < conf.BlueStopH))
     {
+        if (currTime.H > conf.BlueStartH + 1 && bluePowerLvl < 6)
+        {
+            bluePowerLvl = 6;
+        }
+        
         if (currTime.M % LED_LEVEL_CHANGE_BY_MIN == 0 
             && bluePowerLvl < MAX_LED_POW_LEVELS)
             bluePowerLvl++; 
@@ -63,15 +64,20 @@ void checkBlueStatus()
             && bluePowerLvl > 0)
             bluePowerLvl--; 
     }
-    bluePower = LED_POWER[bluePowerLvl];
+    conf.BluePower = LED_POWER[bluePowerLvl];
 }
 
 void checkRedStatus()
 {
     if ((currTime.H == conf.RedStartH &&  currTime.M >= conf.RedStartM) ||
         (currTime.H == conf.RedStopH &&  currTime.M < conf.RedStopM) ||
-        (currTime.H > conf.RedStartH))
+        (currTime.H > conf.RedStartH && currTime.H < conf.RedStopH))
     {
+        if (currTime.H > conf.RedStartH + 1 && redPowerLvl < 6)
+        {
+            redPowerLvl = 6;
+        }
+
         if (currTime.M % LED_LEVEL_CHANGE_BY_MIN == 0 
             && redPowerLvl < MAX_LED_POW_LEVELS)
             redPowerLvl++; 
@@ -82,7 +88,7 @@ void checkRedStatus()
             && redPowerLvl > 0)
             redPowerLvl--; 
     }
-    redPower = LED_POWER[redPowerLvl];
+    conf.RedPower = LED_POWER[redPowerLvl];
 }
 
 void checkExtraStatus()
@@ -91,42 +97,50 @@ void checkExtraStatus()
         (currTime.H == conf.ExtraStopH &&  currTime.M < conf.ExtraStopM) ||
         (currTime.H > conf.ExtraStartH))
     {
-        extraPower = LED_POWER[2];
+        conf.ExtraPower = LED_POWER[2];
     }
     else
     {
-        extraPower = LED_POWER[0];
+        conf.ExtraPower = LED_POWER[0];
     }
 }
 
 void powerOffAll()
 {
-    bluePower = LED_POWER[0];
-    redPower = LED_POWER[0];
-    extraPower = LED_POWER[0];
+    conf.BluePower = LED_POWER[0];
+    conf.RedPower = LED_POWER[0];
+    conf.ExtraPower = LED_POWER[0];
     setLedPower();
 }
 
 void setLedPower()
 {
-    ledcWrite(PWM_BLUE_CHANNEL, bluePower);
-    ledcWrite(PWM_RED_CHANNEL, redPower);
-    ledcWrite(PWM_RED_CHANNEL, extraPower);
+    Serial.print("Blue Power: ");
+    Serial.println(conf.BluePower);
+    Serial.print("Red Power: ");
+    Serial.println(conf.RedPower);
+    Serial.print("Extra Power: ");
+    Serial.println(conf.ExtraPower);
+    ledcWrite(PWM_BLUE_CHANNEL, conf.BluePower);
+    ledcWrite(PWM_RED_CHANNEL, conf.RedPower);
+    ledcWrite(PWM_RED_CHANNEL, conf.ExtraPower);
+    delay(500);
+    setRelays();
 }
 
 void setRelays()
 {
-    if (bluePower > 0)
+    if (conf.BluePower != LED_POWER[0])
         digitalWrite(PIN_R_BLUE, HIGH);
     else
         digitalWrite(PIN_R_BLUE, LOW);
 
-    if (redPower > 0)
+    if (conf.RedPower != LED_POWER[0])
         digitalWrite(PIN_R_RED, HIGH);
     else
         digitalWrite(PIN_R_RED, LOW);
 
-    if (extraPower > 0)
+    if (conf.ExtraPower != LED_POWER[0])
         digitalWrite(PIN_R_EXTRA, HIGH);
     else
         digitalWrite(PIN_R_EXTRA, LOW);

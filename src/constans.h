@@ -12,7 +12,7 @@ const int PWM_EXTRA_CHANNEL = 2;
 
 const int PIN_LED_BLUE = 32;
 const int PIN_LED_RED  = 33;
-const int PIN_LED_EXTRA = 32;
+const int PIN_LED_EXTRA = 25;
 
 const int PIN_R_BLUE = 19;
 const int PIN_R_RED  = 18;
@@ -20,25 +20,26 @@ const int PIN_R_EXTRA = 5;
 const int PIN_R_CO2 = 17;
 
 const int MAX_DUTY_CYCLE = 255;
-const int LED_LEVELS = 15;
+const int LED_LEVELS = 12;
 
 const int LED_LEVEL_CHANGE_BY_MIN = 3;
-const int MAX_LED_POW_LEVELS = 11;
+const int MAX_LED_POW_LEVELS = 10;
 const int LED_POWER[LED_LEVELS] = 
 {
     MAX_DUTY_CYCLE,
-    MAX_DUTY_CYCLE -  5,
-    MAX_DUTY_CYCLE -  10,
-    MAX_DUTY_CYCLE -  15,
-    MAX_DUTY_CYCLE -  20,
-    MAX_DUTY_CYCLE -  30,
+    MAX_DUTY_CYCLE -  7,
+    MAX_DUTY_CYCLE -  13,
+    MAX_DUTY_CYCLE -  19,
+    MAX_DUTY_CYCLE -  25,
+    MAX_DUTY_CYCLE -  37,
     MAX_DUTY_CYCLE -  50,
     MAX_DUTY_CYCLE -  75,
     MAX_DUTY_CYCLE -  100,
-    MAX_DUTY_CYCLE -  125,
-    MAX_DUTY_CYCLE -  225,
+    MAX_DUTY_CYCLE -  150,
+    MAX_DUTY_CYCLE -  230,
     0,
 };
+
 
 //WIFI
 const char* WIFI_SSID     = "meg-home";

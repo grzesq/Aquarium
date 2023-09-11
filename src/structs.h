@@ -23,6 +23,11 @@ struct Config
 
     short Co2Start = 11;
     short Co2Stop = 19;
+    short Co2Satus = 0;
+
+    short BluePower = LED_POWER[0];
+    short RedPower = LED_POWER[0];
+    short ExtraPower = LED_POWER[0];
 } conf;
 
 struct CurrTime

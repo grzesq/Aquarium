@@ -4,17 +4,21 @@
 void setup() {
     Serial.begin(115200);
     Serial.println("Start");
-
     setupPins();
-    switchOffAllRelays();
-    
-    setupLeds();
 
+    switchOffAllRelays();
+    inidLcd();
+    display();
+
+    setupLeds();
+    turOnLcd();
+
+    displayMsg(" Connecting to WiFi");
     connectToWiFi();
     getNtpTime();
     
     Serial.println("Rady.");
-    lastMillis=millis();
+    lastMillis=0;
 }
 
 void setupPins()
@@ -25,29 +29,36 @@ void setupPins()
     pinMode(PIN_R_CO2 , OUTPUT);
 }
 
-void loop() {
+void loop() 
+{
     currMillis = millis();
 
     if (currMillis - lastMillis > (1000*60) || 
-        currMillis < lastMillis)
+        currMillis < lastMillis ||
+        lastMillis == 0)
     {
+        Serial.println("loop.");
         isWorkinglast = isWorking;
         checkWorkingHours();
         updateTime();
         
         if (isWorkinglast != isWorking)
             switchWorkingStatus();
-        else if (isWorking)
+        
+        if (isWorking)
             checkSystemStatus();
 
+        isWorkinglast = isWorking;
         lastMillis = currMillis;
     }
 }
 
 void checkSystemStatus()
 {
+    Serial.println("check system status.");
     checkLedStatus();
     checkCo2Status();
+    display();
 }
 
 void switchWorkingStatus()
@@ -56,10 +67,12 @@ void switchWorkingStatus()
     {
         switchOffAllRelays();
         powerOffAll();
+        turOffLcd();
     }
     else
     {
         checkSystemStatus();
+        turOnLcd();
     }
 }
 
@@ -96,9 +109,17 @@ void updateTime()
 void checkCo2Status()
 {
     if (currTime.H >= conf.Co2Start && currTime.H < conf.Co2Stop)
+    {
         digitalWrite(PIN_R_CO2, HIGH);
+        Serial.println("Co2 On");
+        conf.Co2Satus = 1;
+    }
     else
+    {
         digitalWrite(PIN_R_CO2, LOW);
+        Serial.println("Co2 Off");
+        conf.Co2Satus = 0;
+    }
 }
 
 void switchOffAllRelays()
@@ -111,8 +132,14 @@ void switchOffAllRelays()
 
 void checkWorkingHours()
 {
+    Serial.println("checkWorkingHours.");
     if (currTime.H >= conf.StartH && currTime.H < conf.EndH)
+    {
         isWorking = true;
+        Serial.println("Is working.");
+    }
     else
+    {
         isWorking = false;
+    }
 }
