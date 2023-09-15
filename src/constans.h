@@ -10,13 +10,13 @@ const int PWM_BLUE_CHANNEL = 0;
 const int PWM_RED_CHANNEL  = 1;
 const int PWM_EXTRA_CHANNEL = 2;
 
-const int PIN_LED_BLUE = 32;
-const int PIN_LED_RED  = 33;
-const int PIN_LED_EXTRA = 25;
+const int PIN_LED_BLUE = 33;                                                                                                                                                                                                                                                                                                     ;
+const int PIN_LED_RED  = 25;
+const int PIN_LED_EXTRA = 32;
 
-const int PIN_R_BLUE = 19;
-const int PIN_R_RED  = 18;
-const int PIN_R_EXTRA = 5;
+const int PIN_R_BLUE = 18;
+const int PIN_R_RED  = 5 ;
+const int PIN_R_EXTRA = 19;
 const int PIN_R_CO2 = 17;
 
 const int MAX_DUTY_CYCLE = 255;
