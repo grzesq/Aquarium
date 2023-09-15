@@ -29,8 +29,8 @@ void setupLeds()
     ledcSetup(PWM_EXTRA_CHANNEL, PWM_FREQ, PWM_RESOLUTION);
     
     ledcAttachPin(PIN_LED_BLUE, PWM_BLUE_CHANNEL);
-    ledcAttachPin(PIN_LED_RED, PWM_BLUE_CHANNEL);
-    ledcAttachPin(PIN_LED_EXTRA, PWM_BLUE_CHANNEL);
+    ledcAttachPin(PIN_LED_RED, PWM_RED_CHANNEL);
+    ledcAttachPin(PIN_LED_EXTRA, PWM_EXTRA_CHANNEL);
 
     powerOffAll();
 }
@@ -123,7 +123,7 @@ void setLedPower()
     Serial.println(conf.ExtraPower);
     ledcWrite(PWM_BLUE_CHANNEL, conf.BluePower);
     ledcWrite(PWM_RED_CHANNEL, conf.RedPower);
-    ledcWrite(PWM_RED_CHANNEL, conf.ExtraPower);
+    ledcWrite(PWM_EXTRA_CHANNEL, conf.ExtraPower);
     delay(500);
     setRelays();
 }

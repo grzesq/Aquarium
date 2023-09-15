@@ -48,7 +48,6 @@ void loop()
         if (isWorking)
             checkSystemStatus();
 
-        isWorkinglast = isWorking;
         lastMillis = currMillis;
     }
 }
@@ -61,10 +60,25 @@ void checkSystemStatus()
     display();
 }
 
+void checkWorkingHours()
+{
+    Serial.println("checkWorkingHours.");
+    if (currTime.H >= conf.StartH && currTime.H < conf.EndH)
+    {
+        isWorking = true;
+        Serial.println("Is working.");
+    }
+    else
+    {
+        isWorking = false;
+    }
+}
+
 void switchWorkingStatus()
 {
     if (!isWorking)
     {
+        Serial.println("Out of hours.");
         switchOffAllRelays();
         powerOffAll();
         turOffLcd();
@@ -128,18 +142,4 @@ void switchOffAllRelays()
     digitalWrite(PIN_R_RED, LOW);
     digitalWrite(PIN_R_EXTRA, LOW);
     digitalWrite(PIN_R_CO2, LOW);
-}
-
-void checkWorkingHours()
-{
-    Serial.println("checkWorkingHours.");
-    if (currTime.H >= conf.StartH && currTime.H < conf.EndH)
-    {
-        isWorking = true;
-        Serial.println("Is working.");
-    }
-    else
-    {
-        isWorking = false;
-    }
 }

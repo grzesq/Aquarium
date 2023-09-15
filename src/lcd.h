@@ -18,16 +18,19 @@ void inidLcd()
     Wire.begin();
     lcd.init();
     lcd.noBacklight();
+    lcd.noDisplay();
 }
 
 void turOnLcd()
 {
     lcd.backlight();
+    lcd.display();
 }
 
 void turOffLcd()
 {
-    lcd.backlight();
+    lcd.noBacklight();
+    lcd.noDisplay();
 }
 
 void display()
@@ -48,11 +51,10 @@ void display()
     conf.Co2Satus == 0 ? sprintf(co2, "OFF") : sprintf(co2, "ON ");
 
     sprintf(line1, "               %02d:%02d", currTime.H, currTime.M);
-    sprintf(line2, "");
+    sprintf(line2, "                    ");
     sprintf(line3, "Blue Red  Extra Co2");
     sprintf(line4, " %s %s  %s   %s", blue, red, extra, co2);
 
-    lcd.clear(); 
     lcd.setCursor(0, 0);
     lcd.print(line1);
 
