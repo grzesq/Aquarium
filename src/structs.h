@@ -8,13 +8,13 @@ struct Config
 
     short BlueStartH = 12;
     short BlueStartM = 00;
-    short BlueStopH = 20;
-    short BlueStopM = 30;
+    short BlueStopH = 21;
+    short BlueStopM = 00;
 
     short RedStartH = 12;
     short RedStartM = 15;
     short RedStopH = 20;
-    short RedStopM = 15;
+    short RedStopM = 45;
 
     short ExtraStartH = 8;
     short ExtraStartM = 0;

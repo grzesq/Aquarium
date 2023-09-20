@@ -124,13 +124,13 @@ void checkCo2Status()
 {
     if (currTime.H >= conf.Co2Start && currTime.H < conf.Co2Stop)
     {
-        digitalWrite(PIN_R_CO2, HIGH);
+        digitalWrite(PIN_R_CO2, LOW);
         Serial.println("Co2 On");
         conf.Co2Satus = 1;
     }
     else
     {
-        digitalWrite(PIN_R_CO2, LOW);
+        digitalWrite(PIN_R_CO2, HIGH);
         Serial.println("Co2 Off");
         conf.Co2Satus = 0;
     }
@@ -138,8 +138,8 @@ void checkCo2Status()
 
 void switchOffAllRelays()
 {
-    digitalWrite(PIN_R_BLUE, LOW);
-    digitalWrite(PIN_R_RED, LOW);
-    digitalWrite(PIN_R_EXTRA, LOW);
-    digitalWrite(PIN_R_CO2, LOW);
+    digitalWrite(PIN_R_BLUE, HIGH);
+    digitalWrite(PIN_R_RED, HIGH);
+    digitalWrite(PIN_R_EXTRA, HIGH);
+    digitalWrite(PIN_R_CO2, HIGH);
 }

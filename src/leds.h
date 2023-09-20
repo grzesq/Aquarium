@@ -130,17 +130,17 @@ void setLedPower()
 
 void setRelays()
 {
-    if (conf.BluePower != LED_POWER[0])
+    if (conf.BluePower == LED_POWER[0])
         digitalWrite(PIN_R_BLUE, HIGH);
     else
         digitalWrite(PIN_R_BLUE, LOW);
 
-    if (conf.RedPower != LED_POWER[0])
+    if (conf.RedPower == LED_POWER[0])
         digitalWrite(PIN_R_RED, HIGH);
     else
         digitalWrite(PIN_R_RED, LOW);
 
-    if (conf.ExtraPower != LED_POWER[0])
+    if (conf.ExtraPower == LED_POWER[0])
         digitalWrite(PIN_R_EXTRA, HIGH);
     else
         digitalWrite(PIN_R_EXTRA, LOW);
