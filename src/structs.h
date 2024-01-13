@@ -8,12 +8,12 @@ struct Config
 
     short BlueStartH = 12;
     short BlueStartM = 00;
-    short BlueStopH = 21; 
+    short BlueStopH = 22; 
     short BlueStopM = 0; 
 
     short RedStartH = 12;
     short RedStartM = 0;
-    short RedStopH = 20; 
+    short RedStopH = 21; 
     short RedStopM = 50; 
 
     short ExtraStartH = 8;
@@ -26,7 +26,7 @@ struct Config
 
 
     short Co2Start = 9;
-    short Co2Stop = 18;
+    short Co2Stop = 19;
     short Co2Satus = 0;
 
     short BluePower = LED_POWER[0];
