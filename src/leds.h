@@ -99,7 +99,12 @@ void checkExtraStatus()
     {
         conf.ExtraPower = LED_POWER[2];
     }
+    else if ((currTime.H >= conf.ExtraFullStartH && currTime.H < conf.ExtraFullStopH))
+    {
+        conf.ExtraPower = LED_POWER[7];
+    }
     else
+
     {
         conf.ExtraPower = LED_POWER[0];
     }

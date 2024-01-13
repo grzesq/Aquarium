@@ -16,7 +16,7 @@ void setup() {
     displayMsg(" Connecting to WiFi");
     connectToWiFi();
     getNtpTime();
-    
+    displayMsg(" Ready");
     Serial.println("Rady.");
     lastMillis=0;
 }
