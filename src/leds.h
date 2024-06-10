@@ -93,15 +93,15 @@ void checkRedStatus()
 
 void checkExtraStatus()
 {
-    if ((currTime.H == conf.ExtraStartH &&  currTime.M >= conf.ExtraStartM) ||
-        (currTime.H == conf.ExtraStopH &&  currTime.M < conf.ExtraStopM) ||
+    if ((currTime.H >= conf.ExtraFullStartH && currTime.H < conf.ExtraFullStopH))
+    {
+        conf.ExtraPower = LED_POWER[5];
+    }
+    else if ((currTime.H == conf.ExtraStartH && currTime.M >= conf.ExtraStartM) ||
+        (currTime.H == conf.ExtraStopH && currTime.M < conf.ExtraStopM) ||
         (currTime.H > conf.ExtraStartH))
     {
         conf.ExtraPower = LED_POWER[2];
-    }
-    else if ((currTime.H >= conf.ExtraFullStartH && currTime.H < conf.ExtraFullStopH))
-    {
-        conf.ExtraPower = LED_POWER[7];
     }
     else
 

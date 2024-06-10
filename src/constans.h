@@ -35,8 +35,8 @@ const int LED_POWER[LED_LEVELS] =
     MAX_DUTY_CYCLE -  50,
     MAX_DUTY_CYCLE -  75,
     MAX_DUTY_CYCLE -  100,
-    MAX_DUTY_CYCLE -  150,
-    MAX_DUTY_CYCLE -  230,
+    MAX_DUTY_CYCLE -  153,
+    MAX_DUTY_CYCLE -  192,
     0,
 };
 
