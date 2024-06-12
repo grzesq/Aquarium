@@ -11,8 +11,7 @@ struct Config
     short BlueStopH = 22; 
     short BlueStopM = 0; 
 
-    short RedStartH = 13.0
-    ;
+    short RedStartH = 12.0;
     short RedStartM = 0;
     short RedStopH = 21; 
     short RedStopM = 50; 
