@@ -1,4 +1,8 @@
 {
     "cmake.configureOnOpen": true,
-    "FSharp.suggestGitignore": false
+    "FSharp.suggestGitignore": false,
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "new": "cpp"
+    }
 }

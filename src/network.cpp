@@ -1,26 +1,32 @@
-#ifndef Constants_h
-#define Constants_h
+#include "network.h"
 
-#include "WiFi.h"
-#include <NTPClient.h>
-#include "constans.h"
-#include "structs.h"
-#include "config.h"
+const char* WIFI_SSID     = "meg-home";
+const char* WIFI_PASSWORD = "MateuszeK2003";
+const char* NTP_SERVER    = "pool.ntp.org";
+const IPAddress LOCAL_IP(192,168,5,99);
+const IPAddress GATEWAY(192,168,4,1);
+const IPAddress SUBNET(255,255,254,0);
+const IPAddress DNS1(8,8,8,8);
+const IPAddress DNS2(1,1,1,1);
 
+#define LEAP_YEAR(Y)     ( (Y>0) && !(Y%4) && ( (Y%100) || !(Y%400) ) )
 
-WiFiUDP ntpUDP;
-NTPClient timeClient(ntpUDP, "pool.ntp.org");
+Network::Network()
+{
+    timeClient = new NTPClient(ntpUDP, NTP_SERVER);
+}
 
-void setNtpTimer();
-void connectToWiFi();
-void checkWiFi();
-void getNtpTime();
-bool isSummerTime(unsigned long secs);
+Network::~Network()
+{
+    delete timeClient;
+}
 
-//-------------------------------------------------------------------------------
-//   FUNCTIONS
-//-------------------------------------------------------------------------------
-void checkWiFi()
+bool Network::isWiFiConnected()
+{
+    return  WiFi.status() == WL_CONNECTED;
+}
+
+void Network::checkWiFi()
 {
     if (WiFi.status() != WL_CONNECTED)
     {
@@ -33,30 +39,45 @@ void checkWiFi()
     }
 }
 
-void connectToWiFi()
+WiFiClient Network::getClient()
 {
+    return  webServer.available();
+}
+
+void Network::connectToWiFi()
+{
+    if (!WiFi.config(LOCAL_IP, GATEWAY, SUBNET, DNS1, DNS2)) {
+     Serial.println("STA Failed to configure");
+    }
     WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
     while ( WiFi.status() != WL_CONNECTED ) {
-        Serial.print("WiFi.status()");
-        Serial.println("WIFI try connected");
-        delay ( 5000 );
+        Serial.println("WIFI try connecting ....");
+        delay ( 2000 );
     }
+    webServer.begin();
     Serial.println("WIFI connected");
 }
 
-void getNtpTime()
+Time Network::updateNtpTime()
 {
+    Time lastTime;
+    
+    checkWiFi();
     Serial.println("Get NTP time");
-    checkWiFi();    
+    timeClient->update();
+    lastTime.H = timeClient->getHours();
+    lastTime.M = timeClient->getMinutes();
+    lastTime.S = timeClient->getSeconds();
+    
+    if (isSummerTime(timeClient->getEpochTime()))
+    {
+        lastTime.H++;
+    }
 
-    timeClient.update();
-    currTime.H = timeClient.getHours();
-    currTime.M = timeClient.getMinutes();
-    currTime.S = timeClient.getSeconds();
-    if (isSummerTime(timeClient.getEpochTime())) currTime.H++;
+    return lastTime;
 }
 
-bool isSummerTime(unsigned long secs) 
+bool Network::isSummerTime(unsigned long secs) 
 {
     unsigned long rawTime = secs / 86400L;  // in days
     unsigned long days = 0, year = 1970;
@@ -88,9 +109,6 @@ bool isSummerTime(unsigned long secs)
     if (month > 3 && month < 10) st = true;
     else if (month == 3 && rawTime >= 27) st = true;
     else if (month == 10 && rawTime < 27) st = true;
-    
+
     return st;
 }
-
-
-#endif
