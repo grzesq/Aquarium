@@ -15,3 +15,10 @@ struct WorkTime
     short EM= 0;
     short P= 0;
 };
+
+struct LightPower
+{
+    short W1 =0;
+    short W2 =0;
+    short FS =0;
+};

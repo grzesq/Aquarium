@@ -7,11 +7,12 @@ void setup()
 {
     Serial.begin(115200);
     Serial.println("Start");
-    
+    switchOffAllRelays();
+
     config.init();
-    
     lcd.init();
     lcd.turOn();
+    leds.init();
     
     lcd.displayMsg(" Connecting to WiFi");
     network.connectToWiFi();
@@ -35,16 +36,60 @@ void loop()
         else if (currMillis - lastMillis > (1000*60) ||
                 currMillis < lastMillis || lastMillis == 0)
         {
+            isWorkinglast = isWorking;
             updateTime();
-            Serial.print("Check status ");
-            Serial.print(aquaTime.H);
-            Serial.print(":");
-            Serial.println(aquaTime.M);
+            checkWorkingHours();
+
+            if (isWorkinglast != isWorking)
+                switchWorkingStatus();
+            
+            if (isWorking)
+                checkSystemStatus();
             
             lastMillis = currMillis;
         }
     }
     delay(100);
+}
+
+void switchWorkingStatus()
+{
+}
+
+bool checkCo2Status()
+{
+    WorkTime t = config.getCo2();
+
+    if ((aquaTime.H == t.BH &&  aquaTime.M >= t.BM) ||
+        (aquaTime.H == t.EH &&  aquaTime.M < t.EM) ||
+        (aquaTime.H > t.BH &&  aquaTime.H < t.EH))
+    {
+        digitalWrite(PIN_R_CO2, LOW);
+        Serial.println("Co2 On");
+        return true;
+    }
+    else
+    {
+        digitalWrite(PIN_R_CO2, HIGH);
+        Serial.println("Co2 Off");
+        return false;
+    }
+}
+
+void checkSystemStatus()
+{
+    Serial.print("Check status ");
+    Serial.print(aquaTime.H);
+    Serial.print(":");
+    Serial.println(aquaTime.M);
+
+    leds.checkLedStatus(aquaTime);
+    LightPower p = leds.getPower();
+    setRelays(p);
+    
+    bool c2 = checkCo2Status();
+    lcd.display(aquaTime, p, c2);
+
 }
 
 void updateTime()
@@ -84,4 +129,24 @@ void checkWorkingHours()
     {
         isWorking = false;
     }
+}
+
+void switchOffAllRelays()
+{
+    digitalWrite(PIN_R_W1, HIGH);
+    digitalWrite(PIN_R_W2, HIGH);
+    digitalWrite(PIN_R_FS, HIGH);
+    digitalWrite(PIN_R_CO2, HIGH);
+}
+
+void setRelays(LightPower p)
+{
+    p.W1 == 0 ? digitalWrite(PIN_R_W1, HIGH) :
+                digitalWrite(PIN_R_W1, LOW);
+
+    p.W2 == 0 ? digitalWrite(PIN_R_W2, HIGH) :
+                digitalWrite(PIN_R_W2, LOW);
+
+    p.FS == 0 ? digitalWrite(PIN_R_FS, HIGH) :
+                digitalWrite(PIN_R_FS, LOW);
 }
