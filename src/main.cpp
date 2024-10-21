@@ -18,7 +18,7 @@ void setup()
     network.connectToWiFi();
     aquaTime = network.updateNtpTime();
 
-    checkWorkingHours();
+    setSystem();
 }
 
 void loop() 
@@ -36,24 +36,40 @@ void loop()
         else if (currMillis - lastMillis > (1000*60) ||
                 currMillis < lastMillis || lastMillis == 0)
         {
-            isWorkinglast = isWorking;
-            updateTime();
-            checkWorkingHours();
-
-            if (isWorkinglast != isWorking)
-                switchWorkingStatus();
-            
-            if (isWorking)
-                checkSystemStatus();
-            
+            setSystem();
             lastMillis = currMillis;
         }
     }
     delay(100);
 }
 
+void setSystem()
+{
+    isWorkinglast = isWorking;
+    updateTime();
+    checkWorkingHours();
+
+    if (isWorkinglast != isWorking)
+        switchWorkingStatus();
+
+    if (isWorking)
+        checkSystemStatus();
+}
+
 void switchWorkingStatus()
 {
+    if (!isWorking)
+    {
+        Serial.println("Out of hours.");
+        switchOffAllRelays();
+        leds.powerOffAll();
+        lcd.turOff();
+    }
+    else
+    {
+        checkSystemStatus();
+        lcd.turOn();
+    }
 }
 
 bool checkCo2Status()
@@ -83,8 +99,7 @@ void checkSystemStatus()
     Serial.print(":");
     Serial.println(aquaTime.M);
 
-    leds.checkLedStatus(aquaTime);
-    LightPower p = leds.getPower();
+    LightPower p = leds.getLedsStatus(aquaTime);
     setRelays(p);
     
     bool c2 = checkCo2Status();
